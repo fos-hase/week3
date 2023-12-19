@@ -1,0 +1,14 @@
+name: autograding
+on: push
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    container: docker://ghcr.io/iterative/cml:0-dvc2-base1
+    steps:
+      - uses: actions/checkout@v3
+      - name: autograde_task
+        env:
+          CML_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python ./eval/eval.py >> report.md
+          cml comment create ./report.md
